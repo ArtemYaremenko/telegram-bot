@@ -1,7 +1,7 @@
 package pro.sky.telegrambot.model;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -9,14 +9,21 @@ import java.util.Objects;
 public class Notification {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String notificationText;
 
-    private LocalDate notificationDate;
+    private LocalDateTime notificationDate;
 
-    public Integer getId() {
+    public Notification() {
+    }
+
+    public Notification(Long id, String notificationText, LocalDateTime notificationDate) {
+        this.id = id;
+        this.notificationText = notificationText;
+        this.notificationDate = notificationDate;
+    }
+    public Long getId() {
         return id;
     }
 
@@ -24,11 +31,11 @@ public class Notification {
         return notificationText;
     }
 
-    public LocalDate getNotificationDate() {
+    public LocalDateTime getNotificationDate() {
         return notificationDate;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -36,7 +43,7 @@ public class Notification {
         this.notificationText = text;
     }
 
-    public void setNotificationDate(LocalDate date) {
+    public void setNotificationDate(LocalDateTime date) {
         this.notificationDate = date;
     }
 
