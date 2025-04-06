@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.model.Notification;
+import pro.sky.telegrambot.service.MailService;
 import pro.sky.telegrambot.service.UpdateService;
 
 import javax.annotation.PostConstruct;
@@ -24,7 +25,10 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     private TelegramBot telegramBot;
 
     @Autowired
-    private UpdateService service;
+    private UpdateService updateService;
+
+    @Autowired
+    private MailService mailService;
 
     @PostConstruct
     public void init() {
@@ -41,11 +45,12 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
             if (message.equals("/start")) {
                 telegramBot.execute(new SendMessage(chatId, "Hello!"));
             }
-            Matcher matcher = service.datePattern.matcher(message);
-            if (!service.updateSave(chatId, matcher)) {
+            Matcher matcher = updateService.datePattern.matcher(message);
+            if (!updateService.updateSave(chatId, matcher)) {
                 telegramBot.execute(new SendMessage(chatId, "Input - {dd.MM.yyyy HH:mm some text}"));
+                return;
             }
-           service.run();
+           mailService.run();
         });
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
